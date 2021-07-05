@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
 
         todos.add(Todo("456",true))
+        todos.add(Todo("111",false))
         adapter.refresh(
             todos
         )

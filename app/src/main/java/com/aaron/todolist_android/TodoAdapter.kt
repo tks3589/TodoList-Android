@@ -20,12 +20,12 @@ class TodoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return todos.size
+        return todos.size+1
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val todo = todos[position]
         if(holder is TodoViewHolder) {
+            val todo = todos[position-1]
             holder.checkBox.text = todo.memo
             holder.checkBox.isChecked = todo.checked
         }
@@ -40,7 +40,8 @@ class TodoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun refresh(todos: List<Todo>){
         this.todos = todos
-        notifyDataSetChanged()
+        //notifyDataSetChanged()
+        notifyItemChanged(todos.size)
     }
 
 }
