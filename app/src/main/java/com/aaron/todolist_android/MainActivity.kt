@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var todos = mutableListOf<Todo>()
+    private var todos = listOf<Todo>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,18 +17,22 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         recyclerView.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
 
-        todos.add(Todo.Title("備忘錄"))
-        //todos.add(Todo.Title("456"))
-        todos.add(Todo.Item("111",false))
-        adapter.refresh(
-            todos
-        )
+        todos = todos.toMutableList().apply {
+            add(Todo.Title("備忘錄"))
+            //add(Todo.Item("111",false))
+        }
+
+        adapter.submitList(todos)
+        //var count = 0
         addButton.setOnClickListener {
-            todos.add(Todo.Item("789",false))
-            //todos.add(Todo.Title("xxx"))
-            adapter.refresh(
-                todos
-            )
+            todos = todos.toMutableList().apply {
+                add(Todo.Item("789",false))
+                //add(Todo.Item(count.toString(),false))
+                //count++
+            }
+            //todos = todos.toMutableList()
+            //(todos as MutableList<Todo>).add(Todo.Item("789",false))
+            adapter.submitList(todos)
         }
 
     }

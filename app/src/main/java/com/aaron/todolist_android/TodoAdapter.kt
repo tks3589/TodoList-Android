@@ -2,58 +2,65 @@ package com.aaron.todolist_android
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_title.view.*
 import kotlinx.android.synthetic.main.item_todo.view.*
 
 
-class TodoAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var todos = listOf<Todo>()
+class TodoAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(
+        object :DiffUtil.ItemCallback<Todo>(){
+            override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
+                return oldItem.viewType == newItem.viewType
+            }
+
+            override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
+                return oldItem == newItem
+            }
+
+        }
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
             Todo.TYPE_TITLE -> TodoTitleHolder(parent)
-            else -> TodoViewHolder(parent)
+            else -> TodoItemHolder(parent)
         }
     }
 
-    override fun getItemCount(): Int {
-        return todos.size
-    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val todo = todos[position]
-        when(holder){
-            is TodoTitleHolder -> {
-                holder.title.text = (todo as Todo.Title).content
-            }
-            is TodoViewHolder -> {
-                holder.checkBox.text = (todo as Todo.Item).memo
-                holder.checkBox.isChecked = todo.checked
-            }
+        when(val todo = getItem(position)){
+            is Todo.Title -> (holder as TodoTitleHolder).bind(todo)
+            is Todo.Item  -> (holder as TodoItemHolder).bind(todo)
+
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return todos[position].viewType
-    }
-
-    fun refresh(todos: List<Todo>){
-        this.todos = todos
-        //notifyDataSetChanged()
-        notifyItemInserted(todos.size-1)
+        return getItem(position).viewType
     }
 
 }
 
 class TodoTitleHolder(group: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(group.context).inflate(R.layout.item_title,group,false)){
-    val title = itemView.textTitle
+    private val title = itemView.textTitle
+
+    fun bind(todo:Todo.Title){
+        title.text = todo.content
+    }
 }
 
-class TodoViewHolder(group: ViewGroup) : RecyclerView.ViewHolder(
+class TodoItemHolder(group: ViewGroup) : RecyclerView.ViewHolder(
     LayoutInflater.from(group.context).inflate(R.layout.item_todo,group,false)){
-    val checkBox = itemView.checkbox
+    private val checkBox = itemView.checkbox
+
+    fun bind(todo:Todo.Item){
+        checkBox.text = todo.memo
+        checkBox.isChecked = todo.checked
+    }
 }
 
 
