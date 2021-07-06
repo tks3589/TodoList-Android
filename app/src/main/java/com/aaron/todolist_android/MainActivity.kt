@@ -17,13 +17,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         recyclerView.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
 
-        todos.add(Todo("456",true))
-        todos.add(Todo("111",false))
+        todos.add(Todo.Title("備忘錄"))
+        //todos.add(Todo.Title("456"))
+        todos.add(Todo.Item("111",false))
         adapter.refresh(
             todos
         )
         addButton.setOnClickListener {
-            todos.add(Todo("789",false))
+            todos.add(Todo.Item("789",false))
+            //todos.add(Todo.Title("xxx"))
             adapter.refresh(
                 todos
             )
