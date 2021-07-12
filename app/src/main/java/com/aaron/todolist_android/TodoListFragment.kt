@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_todo_list.*
@@ -28,13 +29,13 @@ class TodoListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
         recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-        val todoViewModel = ViewModelProvider(this).get(TodoViewModel::class.java)
+        val todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         todoViewModel.getLiveData().observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
 
         addButton.setOnClickListener {
-            todoViewModel.addItem()
+            findNavController().navigate(R.id.action_mainFragment_to_addTodoFragment)
         }
     }
 }

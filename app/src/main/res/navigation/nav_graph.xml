@@ -11,6 +11,22 @@
         android:name="com.aaron.todolist_android.TodoListFragment"
         tools:layout="@layout/fragment_todo_list">
 
+        <action
+            android:id="@+id/action_mainFragment_to_addTodoFragment"
+            app:destination="@id/addTodoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addTodoFragment"
+        android:name="com.aaron.todolist_android.AddTodoFragment"
+        tools:layout="@layout/fragment_add_todo">
+
+        <argument
+            android:name="memo"
+            android:defaultValue="刷leetcode"
+            app:argType="string"/>
+
+
     </fragment>
 
 
