@@ -1,5 +1,7 @@
 package com.aaron.todolist_android
 
+import java.util.*
+
 
 sealed class Todo(val viewType: Int) {
     data class Title(
@@ -7,8 +9,10 @@ sealed class Todo(val viewType: Int) {
     ): Todo(TYPE_TITLE)
 
     data class Item(
-         val memo: String,
-         val checked: Boolean
+        val id: Int,
+        val memo: String,
+        val checked: Boolean,
+        val createdAt: Date
     ): Todo(TYPE_ITEM)
 
     companion object{

@@ -1,15 +1,32 @@
 package com.aaron.todolist_android
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
+import com.aaron.todolist_android.database.TodoItem
+import kotlinx.coroutines.launch
+import java.util.*
 
-class TodoViewModel: ViewModel() {
-    private val todoLiveData = MutableLiveData<List<Todo>>(
-            listOf(Todo.Title("備忘錄"))
-    )
+class TodoViewModel(application: Application): AndroidViewModel(application) {
+    private var repository: TodoItemRepository = TodoItemRepository(application)
+    private val title = Todo.Title("備忘錄")
+
+    private val todoLiveData = MediatorLiveData<List<Todo>>().apply{
+        val source = repository.getTodoItems().map {
+            it.map { todoItem ->
+                Todo.Item(todoItem.id,todoItem.title,todoItem.done,todoItem.createAt)
+            }
+        }
+        addSource(source){
+            value = listOf(title) + it
+        }
+        value = listOf(title)
+    }
+
     fun addItem(content: String){
-        val newItem = Todo.Item(content,false)
-        todoLiveData.value = todoLiveData.value!! + listOf(newItem)
+        val todoItem = TodoItem(content,false, Date())
+        viewModelScope.launch {
+            repository.insertTodoItem(todoItem)
+        }
     }
 
     fun getLiveData(): MutableLiveData<List<Todo>>{
