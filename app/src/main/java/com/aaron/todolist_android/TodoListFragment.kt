@@ -24,12 +24,18 @@ class TodoListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = TodoAdapter()
+        val todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
+        val adapter = TodoAdapter().apply {
+            onTodoChangeListener = object :OnTodoChangeListener{
+                override fun onChange(todo: Todo.Item) {
+                    todoViewModel.updateItem(todo)
+                }
+            }
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
         recyclerView.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
-        val todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         todoViewModel.getLiveData().observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })

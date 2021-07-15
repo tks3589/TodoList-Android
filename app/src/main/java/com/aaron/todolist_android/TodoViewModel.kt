@@ -29,6 +29,15 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun updateItem(todo: Todo.Item){
+        val todoItem = TodoItem(todo.memo,todo.checked,todo.createdAt).apply {
+           id = todo.id
+        }
+        viewModelScope.launch {
+            repository.updateTodoItem(todoItem)
+        }
+    }
+
     fun getLiveData(): MutableLiveData<List<Todo>>{
         return todoLiveData
     }
