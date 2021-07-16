@@ -9,11 +9,15 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.aaron.todolist_android.TodoListFragment"
-        tools:layout="@layout/fragment_todo_list">
+        tools:layout="@layout/fragment_todo_list"
+        android:label="備忘錄">
 
         <action
             android:id="@+id/action_mainFragment_to_addTodoFragment"
             app:destination="@id/addTodoFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_modifyTodoFragment"
+            app:destination="@id/modifyTodoFragment" />
     </fragment>
 
     <fragment
@@ -26,6 +30,18 @@
             android:defaultValue="刷leetcode"
             app:argType="string"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/modifyTodoFragment"
+        android:name="com.aaron.todolist_android.ModifyTodoFragment"
+        tools:layout="@layout/fragment_modify_todo">
+
+        <argument
+            android:name="item"
+            app:argType="com.aaron.todolist_android.Todo$Item" />
+
+    </fragment>
+
 
 
 </navigation>

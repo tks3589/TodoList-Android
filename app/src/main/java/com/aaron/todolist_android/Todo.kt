@@ -1,5 +1,7 @@
 package com.aaron.todolist_android
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 
@@ -8,12 +10,13 @@ sealed class Todo(val viewType: Int) {
         val content: String
     ): Todo(TYPE_TITLE)
 
+    @Parcelize
     data class Item(
         val id: Int,
         val memo: String,
         val checked: Boolean,
         val createdAt: Date
-    ): Todo(TYPE_ITEM)
+    ): Todo(TYPE_ITEM),Parcelable
 
     companion object{
         const val TYPE_TITLE = 0

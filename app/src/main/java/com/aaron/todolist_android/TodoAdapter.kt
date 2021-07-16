@@ -3,6 +3,7 @@ package com.aaron.todolist_android
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -74,7 +75,9 @@ class TodoItemHolder(group: ViewGroup,private val onTodoChangeListener: OnTodoCh
                 .setPositiveButton("刪除") { _, _ ->
                     onTodoChangeListener?.onTodoItemDelete(todo)
                 }
-                .setNegativeButton("修改",null)
+                .setNegativeButton("修改") { _, _ ->
+                    it.findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToModifyTodoFragment(todo))
+                }
                 .create().show()
             true
         }

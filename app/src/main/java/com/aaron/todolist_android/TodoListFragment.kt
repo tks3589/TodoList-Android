@@ -45,7 +45,7 @@ class TodoListFragment : Fragment() {
         })
 
         addButton.setOnClickListener {
-            findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToAddTodoFragment("刷刷leetcode喔"))
+            findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToAddTodoFragment(""))
         }
     }
 }
