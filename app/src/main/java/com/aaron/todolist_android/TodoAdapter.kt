@@ -66,12 +66,14 @@ class TodoItemHolder(group: ViewGroup,private val onTodoChangeListener: OnTodoCh
         checkBox.text = todo.memo
         checkBox.isChecked = todo.checked
         checkBox.setOnClickListener {
-            onTodoChangeListener?.onChange(Todo.Item(todo.id,todo.memo,!todo.checked,todo.createdAt))
+            onTodoChangeListener?.onCheckBoxChange(Todo.Item(todo.id,todo.memo,!todo.checked,todo.createdAt))
         }
         checkBox.setOnLongClickListener {
             AlertDialog.Builder(it.context)
                 .setMessage(todo.memo)
-                .setPositiveButton("刪除",null)
+                .setPositiveButton("刪除") { _, _ ->
+                    onTodoChangeListener?.onTodoItemDelete(todo)
+                }
                 .setNegativeButton("修改",null)
                 .create().show()
             true

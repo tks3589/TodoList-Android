@@ -1,10 +1,7 @@
 package com.aaron.todolist_android.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface TodoItemDao {
@@ -13,6 +10,9 @@ interface TodoItemDao {
 
     @Update
     suspend fun update(item: TodoItem)
+
+    @Delete
+    suspend fun delete(item: TodoItem)
 
     @Query("select * from TodoItem order by createAt desc")
     fun findAll(): LiveData<List<TodoItem>>

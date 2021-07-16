@@ -27,8 +27,12 @@ class TodoListFragment : Fragment() {
         val todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         val adapter = TodoAdapter().apply {
             onTodoChangeListener = object :OnTodoChangeListener{
-                override fun onChange(todo: Todo.Item) {
+                override fun onCheckBoxChange(todo: Todo.Item) {
                     todoViewModel.updateItem(todo)
+                }
+
+                override fun onTodoItemDelete(todo: Todo.Item) {
+                    todoViewModel.deleteItem(todo)
                 }
             }
         }
@@ -41,7 +45,7 @@ class TodoListFragment : Fragment() {
         })
 
         addButton.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_addTodoFragment)
+            findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToAddTodoFragment("刷刷leetcode喔"))
         }
     }
 }
