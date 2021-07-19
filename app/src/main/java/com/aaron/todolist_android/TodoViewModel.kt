@@ -8,7 +8,7 @@ import java.util.*
 
 class TodoViewModel(application: Application): AndroidViewModel(application) {
     private var repository: TodoItemRepository = TodoItemRepository(application)
-    private val title = Todo.Title("備忘錄")
+    //private val title = Todo.Title("備忘錄")
 
     private val todoLiveData = MediatorLiveData<List<Todo>>().apply{
         val source = repository.getTodoItems().map {
@@ -17,9 +17,9 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
             }
         }
         addSource(source){
-            value = listOf(title) + it
+            value =  it
         }
-        value = listOf(title)
+        //value = listOf(title)
     }
 
     fun addItem(content: String){

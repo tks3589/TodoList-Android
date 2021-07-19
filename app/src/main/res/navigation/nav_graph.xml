@@ -23,7 +23,8 @@
     <fragment
         android:id="@+id/addTodoFragment"
         android:name="com.aaron.todolist_android.AddTodoFragment"
-        tools:layout="@layout/fragment_add_todo">
+        tools:layout="@layout/fragment_add_todo"
+        android:label="新增">
 
         <argument
             android:name="memo"
@@ -34,11 +35,20 @@
     <fragment
         android:id="@+id/modifyTodoFragment"
         android:name="com.aaron.todolist_android.ModifyTodoFragment"
-        tools:layout="@layout/fragment_modify_todo">
+        tools:layout="@layout/fragment_modify_todo"
+        android:label="修改">
 
         <argument
             android:name="item"
             app:argType="com.aaron.todolist_android.Todo$Item" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.aaron.todolist_android.SettingsFragment"
+        tools:layout="@layout/fragment_settings"
+        android:label="設定">
 
     </fragment>
 
