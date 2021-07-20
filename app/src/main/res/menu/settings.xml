@@ -5,4 +5,8 @@
     <item
         android:id="@+id/settings_item"
         android:title="設定" />
+
+    <item
+        android:id="@+id/settings_record"
+        android:title="歷史紀錄" />
 </menu>

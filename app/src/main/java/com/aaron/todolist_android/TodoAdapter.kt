@@ -75,7 +75,7 @@ class TodoItemHolder(group: ViewGroup,private val onTodoChangeListener: OnTodoCh
                 .setPositiveButton("刪除") { _, _ ->
                     onTodoChangeListener?.onTodoItemDelete(todo)
                 }
-                .setNegativeButton("修改") { _, _ ->
+                .setNegativeButton("編輯") { _, _ ->
                     it.findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToModifyTodoFragment(todo))
                 }
                 .create().show()
