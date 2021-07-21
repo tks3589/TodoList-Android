@@ -1,4 +1,4 @@
-package com.aaron.todolist_android
+package com.aaron.todolist_android.page
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.aaron.todolist_android.*
 import kotlinx.android.synthetic.main.fragment_todo_list.*
 
 class TodoListFragment : Fragment() {
@@ -26,7 +27,8 @@ class TodoListFragment : Fragment() {
 
         val todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         val adapter = TodoAdapter().apply {
-            onTodoChangeListener = object :OnTodoChangeListener{
+            onTodoChangeListener = object :
+                OnTodoChangeListener {
                 override fun onCheckBoxChange(todo: Todo.Item) {
                     todoViewModel.updateItem(todo)
                 }
@@ -45,7 +47,11 @@ class TodoListFragment : Fragment() {
         })
 
         addButton.setOnClickListener {
-            findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToAddTodoFragment(""))
+            findNavController().navigate(
+                TodoListFragmentDirections.actionMainFragmentToAddTodoFragment(
+                    ""
+                )
+            )
         }
     }
 }

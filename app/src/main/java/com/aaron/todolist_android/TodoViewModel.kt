@@ -9,7 +9,7 @@ import java.util.*
 class TodoViewModel(application: Application): AndroidViewModel(application) {
     private var repository: TodoItemRepository = TodoItemRepository(application)
     private val loadTitle = Todo.Title("讀取中...")
-    private val emptyTitle = Todo.Title("今日悠閒，什麼事都不用做")
+    private val emptyTitle = Todo.Title("空空如也，什麼也沒有")
 
     private val todoLiveData = MediatorLiveData<List<Todo>>().apply{
         val source = repository.getTodoItems().map {

@@ -1,4 +1,4 @@
-package com.aaron.todolist_android
+package com.aaron.todolist_android.page
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.aaron.todolist_android.page.ModifyTodoFragmentArgs
+import com.aaron.todolist_android.R
+import com.aaron.todolist_android.Todo
+import com.aaron.todolist_android.TodoViewModel
 import kotlinx.android.synthetic.main.fragment_modify_todo.*
 import kotlinx.android.synthetic.main.fragment_modify_todo.editTodo
 
@@ -39,7 +43,12 @@ class ModifyTodoFragment : Fragment() {
             if(editTodo.text.isNullOrEmpty()){
                 editTodo.error = "請輸入您的待辦事項！"
             }else {
-                var updatedItem =Todo.Item(item.id,editTodo.text.toString(),item.checked,item.createdAt)
+                var updatedItem = Todo.Item(
+                    item.id,
+                    editTodo.text.toString(),
+                    item.checked,
+                    item.createdAt
+                )
                 todoViewModel.updateItem(updatedItem)
                 inputMethodManager.hideSoftInputFromWindow(view.windowToken,0)
                 findNavController().popBackStack()

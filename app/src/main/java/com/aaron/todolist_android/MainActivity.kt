@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity() {
                  R.id.settings_item -> {
                     findNavController(navHostFragment).navigate(R.id.settingsFragment)
                  }
-                R.id.settings_record -> {
-                    findNavController(navHostFragment).navigate(R.id.historyFragment)
+                R.id.settings_recycle -> {
+                    findNavController(navHostFragment).navigate(R.id.recycleFragment)
                 }
             }
             true

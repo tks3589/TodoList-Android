@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.aaron.todolist_android.TodoListFragment"
+        android:name="com.aaron.todolist_android.page.TodoListFragment"
         tools:layout="@layout/fragment_todo_list"
         android:label="備忘錄">
 
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/addTodoFragment"
-        android:name="com.aaron.todolist_android.AddTodoFragment"
+        android:name="com.aaron.todolist_android.page.AddTodoFragment"
         tools:layout="@layout/fragment_add_todo"
         android:label="新增">
 
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/modifyTodoFragment"
-        android:name="com.aaron.todolist_android.ModifyTodoFragment"
+        android:name="com.aaron.todolist_android.page.ModifyTodoFragment"
         tools:layout="@layout/fragment_modify_todo"
         android:label="編輯">
 
@@ -46,17 +46,17 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.aaron.todolist_android.SettingsFragment"
+        android:name="com.aaron.todolist_android.page.SettingsFragment"
         tools:layout="@layout/fragment_settings"
         android:label="設定">
 
     </fragment>
 
     <fragment
-        android:id="@+id/historyFragment"
-        android:name="com.aaron.todolist_android.HistoryFragment"
-        tools:layout="@layout/fragment_history"
-        android:label="歷史紀錄">
+        android:id="@+id/recycleFragment"
+        android:name="com.aaron.todolist_android.page.RecycleFragment"
+        tools:layout="@layout/fragment_recycle"
+        android:label="垃圾桶">
 
     </fragment>
 

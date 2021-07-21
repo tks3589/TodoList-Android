@@ -1,10 +1,11 @@
-package com.aaron.todolist_android
+package com.aaron.todolist_android.page
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.aaron.todolist_android.R
 
 class SettingsFragment: Fragment() {
     override fun onCreateView(

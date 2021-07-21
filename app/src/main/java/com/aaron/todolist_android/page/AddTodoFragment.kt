@@ -1,4 +1,4 @@
-package com.aaron.todolist_android
+package com.aaron.todolist_android.page
 
 import android.content.Context
 import android.os.Bundle
@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.aaron.todolist_android.page.AddTodoFragmentArgs
+import com.aaron.todolist_android.R
+import com.aaron.todolist_android.TodoViewModel
 import kotlinx.android.synthetic.main.fragment_add_todo.*
 
 class AddTodoFragment : Fragment() {
