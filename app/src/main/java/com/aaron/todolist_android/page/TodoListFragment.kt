@@ -26,15 +26,14 @@ class TodoListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
-        val adapter = TodoAdapter().apply {
+        val adapter = TodoAdapter(0).apply {
             onTodoChangeListener = object :
                 OnTodoChangeListener {
-                override fun onCheckBoxChange(todo: Todo.Item) {
+                override fun onTodoItemChange(todo: Todo.Item) {
                     todoViewModel.updateItem(todo)
                 }
 
                 override fun onTodoItemDelete(todo: Todo.Item) {
-                    todoViewModel.deleteItem(todo)
                 }
             }
         }

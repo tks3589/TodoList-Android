@@ -23,4 +23,8 @@ class TodoItemRepository(application: Application) {
     fun getTodoItems(): LiveData<List<TodoItem>>{
         return database.todoItemDao().findAll()
     }
+
+    fun getRecycledTodoItems(): LiveData<List<TodoItem>>{
+        return database.todoItemDao().findAllRecycled()
+    }
 }

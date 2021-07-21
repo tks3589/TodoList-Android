@@ -8,6 +8,7 @@ import java.util.*
 data class TodoItem (
     var title: String,
     var done: Boolean,
+    var recycled: Boolean,
     var createAt: Date
 ){
     @PrimaryKey(autoGenerate = true)

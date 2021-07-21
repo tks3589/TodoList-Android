@@ -10,12 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.aaron.todolist_android.page.ModifyTodoFragmentArgs
 import com.aaron.todolist_android.R
 import com.aaron.todolist_android.Todo
 import com.aaron.todolist_android.TodoViewModel
 import kotlinx.android.synthetic.main.fragment_modify_todo.*
-import kotlinx.android.synthetic.main.fragment_modify_todo.editTodo
 
 class ModifyTodoFragment : Fragment() {
     private val args by navArgs<ModifyTodoFragmentArgs>()
@@ -47,6 +45,7 @@ class ModifyTodoFragment : Fragment() {
                     item.id,
                     editTodo.text.toString(),
                     item.checked,
+                    item.recycled,
                     item.createdAt
                 )
                 todoViewModel.updateItem(updatedItem)

@@ -15,6 +15,7 @@ sealed class Todo(val viewType: Int) {
         val id: Int,
         val memo: String,
         val checked: Boolean,
+        val recycled: Boolean,
         val createdAt: Date
     ): Todo(TYPE_ITEM),Parcelable
 

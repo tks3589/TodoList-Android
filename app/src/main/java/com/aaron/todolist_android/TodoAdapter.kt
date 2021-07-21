@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_todo.view.*
 import java.text.SimpleDateFormat
 
 
-class TodoAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(
+class TodoAdapter(viewC: Int) : ListAdapter<Todo, RecyclerView.ViewHolder>(
         object :DiffUtil.ItemCallback<Todo>(){
             override fun areItemsTheSame(oldItem: Todo, newItem: Todo): Boolean {
                 return oldItem.viewType == newItem.viewType
@@ -27,11 +27,12 @@ class TodoAdapter : ListAdapter<Todo, RecyclerView.ViewHolder>(
 ) {
 
     var onTodoChangeListener: OnTodoChangeListener? = null
+    private val viewC = viewC
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
             Todo.TYPE_TITLE -> TodoTitleHolder(parent)
-            else -> TodoItemHolder(parent,onTodoChangeListener)
+            else -> TodoItemHolder(parent,onTodoChangeListener,viewC)
         }
     }
 
@@ -59,7 +60,7 @@ class TodoTitleHolder(group: ViewGroup) : RecyclerView.ViewHolder(
     }
 }
 
-class TodoItemHolder(group: ViewGroup,private val onTodoChangeListener: OnTodoChangeListener?) : RecyclerView.ViewHolder(
+class TodoItemHolder(group: ViewGroup,private val onTodoChangeListener: OnTodoChangeListener?,private val viewC: Int) : RecyclerView.ViewHolder(
     LayoutInflater.from(group.context).inflate(R.layout.item_todo,group,false)){
     private val checkBox = itemView.checkbox
     private val date = itemView.create_at
@@ -68,20 +69,39 @@ class TodoItemHolder(group: ViewGroup,private val onTodoChangeListener: OnTodoCh
         checkBox.text = todo.memo
         checkBox.isChecked = todo.checked
         checkBox.setOnClickListener {
-            onTodoChangeListener?.onCheckBoxChange(Todo.Item(todo.id,todo.memo,!todo.checked,todo.createdAt))
+            onTodoChangeListener?.onTodoItemChange(Todo.Item(todo.id,todo.memo,!todo.checked,todo.recycled,todo.createdAt))
         }
-        checkBox.setOnLongClickListener {
-            AlertDialog.Builder(it.context)
-                .setMessage(todo.memo)
-                .setPositiveButton("刪除") { _, _ ->
-                    onTodoChangeListener?.onTodoItemDelete(todo)
+        when(viewC){
+            0 ->{
+                checkBox.setOnLongClickListener {
+                    AlertDialog.Builder(it.context)
+                        .setMessage(todo.memo)
+                        .setPositiveButton("刪除") { _, _ ->
+                            onTodoChangeListener?.onTodoItemChange(Todo.Item(todo.id,todo.memo,todo.checked,true,todo.createdAt))
+                        }
+                        .setNegativeButton("編輯") { _, _ ->
+                            it.findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToModifyTodoFragment(todo))
+                        }
+                        .create().show()
+                    true
                 }
-                .setNegativeButton("編輯") { _, _ ->
-                    it.findNavController().navigate(TodoListFragmentDirections.actionMainFragmentToModifyTodoFragment(todo))
+            }
+            else->{
+                checkBox.setOnLongClickListener {
+                    AlertDialog.Builder(it.context)
+                        .setMessage(todo.memo)
+                        .setPositiveButton("刪除") { _, _ ->
+                            onTodoChangeListener?.onTodoItemDelete(todo)
+                        }
+                        .setNegativeButton("還原") { _, _ ->
+                            onTodoChangeListener?.onTodoItemChange(Todo.Item(todo.id,todo.memo,todo.checked,false,todo.createdAt))
+                        }
+                        .create().show()
+                    true
                 }
-                .create().show()
-            true
+            }
         }
+
         date.text = SimpleDateFormat.getDateTimeInstance().format(todo.createdAt)
     }
 }
