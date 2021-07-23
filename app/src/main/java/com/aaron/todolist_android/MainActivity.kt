@@ -4,19 +4,23 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
-   //private var mSysThemeConfig = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setTheme()
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment)  as NavHostFragment
         navController = navHostFragment.navController
@@ -48,17 +52,16 @@ class MainActivity : AppCompatActivity() {
         processToolBarStatus()
     }
 
-    private fun updateUiMode(){
-//        when (mSysThemeConfig) {
-//            Configuration.UI_MODE_NIGHT_NO -> {
-//                //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//            }
-//            Configuration.UI_MODE_NIGHT_YES -> {
-//                //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//            }
-//        }
-        recreate()
+    private fun setTheme(){
+         val uiDataStore = UIModePreference(this)
+         lifecycleScope.launch {
+             if(uiDataStore.uiMode.first())
+                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+             else
+                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+         }
     }
+
 
     private fun processToolBarStatus(){
         when(navController.currentDestination?.id){
@@ -73,7 +76,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        //mSysThemeConfig = newConfig.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        updateUiMode()
+        recreate()
     }
 }
