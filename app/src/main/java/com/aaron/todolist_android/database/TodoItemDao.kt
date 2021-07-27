@@ -19,4 +19,7 @@ interface TodoItemDao {
 
     @Query("select * from TodoItem where recycled = 1 order by createAt desc")
     fun findAllRecycled(): LiveData<List<TodoItem>>
+
+    @Query("select count(id) from TodoItem where recycled = 0 and done = 0")
+    fun findAllCheckNum(): LiveData<Int>
 }

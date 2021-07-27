@@ -1,6 +1,8 @@
 package com.aaron.todolist_android.page
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,8 @@ import com.aaron.todolist_android.*
 import kotlinx.android.synthetic.main.fragment_todo_list.*
 
 class TodoListFragment : Fragment() {
+    private lateinit var cIntent:Intent
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,6 +47,15 @@ class TodoListFragment : Fragment() {
 
         todoViewModel.getLiveData().observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+        })
+        cIntent = Intent(context,TodoService::class.java)
+
+        todoViewModel.getCheckNumLiveData().observe(viewLifecycleOwner, Observer {
+            if(it!=0) {
+                cIntent.putExtra("num", it)
+                context?.startService(cIntent)
+            }else
+                context?.stopService(cIntent)
         })
 
         addButton.setOnClickListener {

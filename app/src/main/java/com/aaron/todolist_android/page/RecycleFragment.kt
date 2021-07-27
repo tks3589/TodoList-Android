@@ -1,5 +1,6 @@
 package com.aaron.todolist_android.page
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,6 +45,14 @@ class RecycleFragment :Fragment() {
 
         todoViewModel.getRecycledLiveData().observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
+        })
+
+        var cIntent = Intent(context,TodoService::class.java)
+        todoViewModel.getCheckNumLiveData().observe(viewLifecycleOwner,{
+            if(it!=0) {
+                cIntent.putExtra("num", it)
+                context?.startService(cIntent)
+            }
         })
     }
 }

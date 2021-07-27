@@ -1,6 +1,7 @@
 package com.aaron.todolist_android
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.aaron.todolist_android.database.TodoItem
 import kotlinx.coroutines.launch
@@ -42,6 +43,13 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
         value = listOf(loadTitle)
     }
 
+    private val todoCheckNum = MediatorLiveData<Int>().apply {
+        val source = repository.getCheckNum()
+        addSource(source){
+            value = it
+        }
+    }
+
     fun addItem(content: String){
         val todoItem = TodoItem(content,false, recycled = false, createAt = Date())
         viewModelScope.launch {
@@ -73,5 +81,9 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
 
     fun getRecycledLiveData(): MutableLiveData<List<Todo>>{
         return todoRecycledLiveData
+    }
+
+    fun getCheckNumLiveData(): MutableLiveData<Int>{
+        return todoCheckNum
     }
 }
