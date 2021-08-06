@@ -86,4 +86,8 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
     fun getCheckNumLiveData(): MutableLiveData<Int>{
         return todoCheckNum
     }
+
+    suspend fun login(id: String): String{
+        return repository.login(id)
+    }
 }

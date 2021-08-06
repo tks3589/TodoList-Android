@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.aaron.todolist_android.database.AppDatabase
 import com.aaron.todolist_android.database.TodoItem
+import com.aaron.todolist_android.network.ApiClient
 
 class TodoItemRepository(application: Application) {
     private val database = AppDatabase.getInstance(application)
+    private val apiClient = ApiClient()
+    //TODO 判斷有沒有登入 做資料同步
 
     suspend fun insertTodoItem(todoItem: TodoItem){
         database.todoItemDao().insert(todoItem)
@@ -30,5 +33,9 @@ class TodoItemRepository(application: Application) {
 
     fun getCheckNum(): LiveData<Int>{
         return database.todoItemDao().findAllCheckNum()
+    }
+
+    suspend fun login(id: String): String{
+        return apiClient.login(id)
     }
 }

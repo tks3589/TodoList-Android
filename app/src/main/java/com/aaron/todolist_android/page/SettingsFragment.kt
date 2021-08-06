@@ -1,6 +1,7 @@
 package com.aaron.todolist_android.page
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -12,11 +13,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.aaron.todolist_android.R
+import com.aaron.todolist_android.TodoViewModel
 import com.aaron.todolist_android.UIModePreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -26,6 +30,10 @@ import kotlinx.coroutines.launch
 class SettingsFragment: Fragment() {
     private val GOOGLE_LOGIN = 123
     private var account:GoogleSignInAccount?= null
+    private lateinit var mGoogleSignInClient:GoogleSignInClient
+    private lateinit var todoViewModel:TodoViewModel
+    private var progressDialog:ProgressDialog?= null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +41,12 @@ class SettingsFragment: Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_settings,container,false)
         checkUiModeStatus(view)
+        progressDialog = ProgressDialog(requireContext()).apply {
+            setMessage("登入中...")
+            setCanceledOnTouchOutside(false)
+            setCancelable(false)
+        }
+        todoViewModel = ViewModelProvider(requireActivity()).get(TodoViewModel::class.java)
         return view
     }
 
@@ -66,7 +80,7 @@ class SettingsFragment: Fragment() {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .build()
-        val mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
+        mGoogleSignInClient = GoogleSignIn.getClient(context, gso)
         val signInIntent = mGoogleSignInClient.signInIntent
 
         login_block.setOnClickListener {
@@ -93,9 +107,20 @@ class SettingsFragment: Fragment() {
         if (requestCode == GOOGLE_LOGIN && resultCode==Activity.RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             account = task.getResult(ApiException::class.java)
-            login_status.text = account?.email
-            Toast.makeText(context, account?.displayName + " 已登入", Toast.LENGTH_SHORT).show()
-            //Log.d("iddd",account?.id.toString())
+            lifecycleScope.launch {
+                progressDialog?.show()
+                if (todoViewModel.login(account?.id.toString()).indexOf("200")!=-1){
+                    progressDialog?.dismiss()
+                    login_status.text = account?.email
+                    Toast.makeText(context, account?.displayName + " 已登入", Toast.LENGTH_SHORT).show()
+                    //Log.d("iddd",account?.id.toString())
+                }else{
+                    progressDialog?.dismiss()
+                    mGoogleSignInClient.signOut()
+                    account = null
+                    Toast.makeText(context, "登入失敗", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
