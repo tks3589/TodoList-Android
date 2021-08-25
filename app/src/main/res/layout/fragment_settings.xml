@@ -56,11 +56,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="應用程式版本" />
+
         <TextView
             android:id="@+id/version_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="v1.0.0" />
+            android:text="v0.0.0" />
     </LinearLayout>
 
 </LinearLayout>

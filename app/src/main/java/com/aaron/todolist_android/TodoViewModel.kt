@@ -14,31 +14,41 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
     private val emptyRecycleTitle = Todo.Title("沒有垃圾還能叫垃圾桶嗎")
 
     private val todoLiveData = MediatorLiveData<List<Todo>>().apply{
-        val source = repository.getTodoItems().map {
-            it.map { todoItem ->
-                Todo.Item(todoItem.id,todoItem.title,todoItem.done,todoItem.recycled,todoItem.createAt)
+        viewModelScope.launch {
+            val source = repository.getTodoItems().map {
+                it.map { todoItem ->
+                    Todo.Item(
+                        todoItem.id,
+                        todoItem.title,
+                        todoItem.done,
+                        todoItem.recycled,
+                        todoItem.createAt
+                    )
+                }
             }
-        }
-        addSource(source){
-            value = if(it.isNotEmpty())
-                it
-            else
-                listOf(emptyListTitle)
+            addSource(source) {
+                value = if (it.isNotEmpty())
+                    it
+                else
+                    listOf(emptyListTitle)
+            }
         }
         value = listOf(loadTitle)
     }
 
     private val todoRecycledLiveData = MediatorLiveData<List<Todo>>().apply{
-        val source = repository.getRecycledTodoItems().map {
-            it.map { todoItem ->
-                Todo.Item(todoItem.id,todoItem.title,todoItem.done,todoItem.recycled,todoItem.createAt)
+        viewModelScope.launch {
+            val source = repository.getRecycledTodoItems().map {
+                it.map { todoItem ->
+                    Todo.Item(todoItem.id,todoItem.title,todoItem.done,todoItem.recycled,todoItem.createAt)
+                }
             }
-        }
-        addSource(source){
-            value = if(it.isNotEmpty())
-                it
-            else
-                listOf(emptyRecycleTitle)
+            addSource(source){
+                value = if(it.isNotEmpty())
+                    it
+                else
+                    listOf(emptyRecycleTitle)
+            }
         }
         value = listOf(loadTitle)
     }
@@ -85,6 +95,11 @@ class TodoViewModel(application: Application): AndroidViewModel(application) {
 
     fun getCheckNumLiveData(): MutableLiveData<Int>{
         return todoCheckNum
+    }
+
+    suspend fun asyncData(){
+        repository.processingData()
+        repository.processingData3()
     }
 
     suspend fun login(id: String): String{

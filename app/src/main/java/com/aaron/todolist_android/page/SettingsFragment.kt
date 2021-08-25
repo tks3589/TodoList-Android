@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.aaron.todolist_android.R
+import com.aaron.todolist_android.ShowStatusPreference
 import com.aaron.todolist_android.TodoViewModel
 import com.aaron.todolist_android.UIModePreference
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -33,6 +34,7 @@ class SettingsFragment: Fragment() {
     private lateinit var mGoogleSignInClient:GoogleSignInClient
     private lateinit var todoViewModel:TodoViewModel
     private var progressDialog:ProgressDialog?= null
+    private lateinit var showPref:ShowStatusPreference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +65,8 @@ class SettingsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val pInfo = requireActivity().packageManager.getPackageInfo(requireActivity().packageName,0)
+        version_num.text = "v"+pInfo.versionName
         theme_switch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -72,6 +76,7 @@ class SettingsFragment: Fragment() {
             }
             setTheme(isChecked)
         }
+        showPref = ShowStatusPreference(requireContext())
         account = GoogleSignIn.getLastSignedInAccount(context)
         if(account!=null){
             login_status.text = account?.email
@@ -96,6 +101,7 @@ class SettingsFragment: Fragment() {
                             login_status.text = "未登入"
                             Toast.makeText(context,"已登出",Toast.LENGTH_SHORT).show()
                             account = null
+                            lifecycleScope.launch { showPref.saveToLoginStatus(false) }
                         }
                     }.create().show()
             }
@@ -112,7 +118,9 @@ class SettingsFragment: Fragment() {
                 if (todoViewModel.login(account?.id.toString()).indexOf("200")!=-1){
                     progressDialog?.dismiss()
                     login_status.text = account?.email
+                    todoViewModel.asyncData()
                     Toast.makeText(context, account?.displayName + " 已登入", Toast.LENGTH_SHORT).show()
+                    showPref.saveToLoginStatus(true)
                     //Log.d("iddd",account?.id.toString())
                 }else{
                     progressDialog?.dismiss()

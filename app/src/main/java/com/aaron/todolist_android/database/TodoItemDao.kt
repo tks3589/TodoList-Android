@@ -15,10 +15,10 @@ interface TodoItemDao {
     suspend fun delete(item: TodoItem)
 
     @Query("select * from TodoItem where recycled = 0 order by createAt desc")
-    fun findAll(): LiveData<List<TodoItem>>
+    suspend fun findAll(): List<TodoItem>
 
     @Query("select * from TodoItem where recycled = 1 order by createAt desc")
-    fun findAllRecycled(): LiveData<List<TodoItem>>
+    suspend fun findAllRecycled(): List<TodoItem>
 
     @Query("select count(id) from TodoItem where recycled = 0 and done = 0")
     fun findAllCheckNum(): LiveData<Int>
